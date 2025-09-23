@@ -12,7 +12,9 @@ const api = axios.create({
 //authenttifaication :
 
 export async function registerUser(payload) {
-  const res = await api.post("/auth/register", payload);
+  const res = await api.post("/auth/register", payload,{
+  headers: { "Content-Type" : "application/json" }
+    });
   return res.data;
 }
 
