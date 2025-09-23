@@ -46,12 +46,12 @@ function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 p-6">
+    <div className="flex justify-center items-center min-h-screen bg-slate-800 text-white p-6">
       <div className="w-full max-w-md">
         {message && (
           <div
-            className={`mb-4 px-4 py-3 rounded-md text-sm font-medium ${
-              message.includes("Erreur") ? "bg-red-100 text-red-700" : "bg-green-100 text-green-800"
+            className={`absolute top-4 p-4 rounded-md text-sm font-medium ${
+              message.includes("Erreur") ? "bg-red-500 text-white" : "bg-green-500 text-white"
             }`}
           >
             {message}
@@ -59,14 +59,14 @@ function Register() {
         )}
 
         {isLoading && (
-          <div className="mb-4 text-center text-gray-200">Chargement...</div>
+          <div className="mb-4 text-center text-slate-200">Chargement...</div>
         )}
 
-        <h1 className="text-3xl font-bold mb-6 text-gray-100 text-center">
-          Page d'inscription
+        <h1 className="text-2xl font-bold mb-6 text-slate-200 text-center">
+          Page d'enregistrement client
         </h1>
 
-        <form className="bg-gray-900 p-8 rounded-xl shadow-xl border border-gray-700" onSubmit={handleSubmit}>
+        <form className="bg-slate-900 p-8 rounded-lg shadow-md" onSubmit={handleSubmit}>
           {[
             { label: "Nom", name: "nom_user", type: "text" },
             { label: "Email", name: "email", type: "email" },
@@ -74,8 +74,8 @@ function Register() {
             { label: "Date de naissance", name: "date_naissance", type: "date" },
             { label: "Mot de passe", name: "password", type: "password" },
           ].map((field) => (
-            <div className="mb-5" key={field.name}>
-              <label className="block text-gray-300 font-medium mb-2" htmlFor={field.name}>
+            <div className="mb-4" key={field.name}>
+              <label className="block text-slate-400 font-medium mb-1" htmlFor={field.name}>
                 {field.label} :
               </label>
               <input
@@ -84,16 +84,17 @@ function Register() {
                 name={field.name}
                 value={formData[field.name]}
                 onChange={handleChange}
-                className="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300"
+                className="w-full p-2 rounded-md bg-slate-700 border border-slate-600 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
               />
             </div>
           ))}
 
           <button
             type="submit"
-            className="w-full py-3 px-4 bg-green-500 text-gray-900 font-semibold rounded-lg shadow-md hover:bg-green-600 transition duration-300"
+            className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300 mt-6"
+            disabled={isLoading}
           >
-            S'inscrire
+            {isLoading ? "En cours..." : "S'inscrire"}
           </button>
         </form>
       </div>
