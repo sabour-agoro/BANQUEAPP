@@ -7,17 +7,14 @@ function User() {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token")
-    fetchUsers(token);
-  }, []);
+
 
   // Récupérer tous les utilisateurs
   const fetchUsers = async (token) => {
     setIsLoading(true);
     try {
       const data = await getUsers(token);
-      setUsers(data);
+      setUsers(data.result);
     } catch (err) {
       console.error("Erreur de récupération des utilisateurs :", err.message);
       setMessage("Erreur de récupération des utilisateurs");
@@ -25,6 +22,10 @@ function User() {
       setIsLoading(false);
     }
   };
+    useEffect(() => {
+    const token = localStorage.getItem("token")
+    fetchUsers(token);
+  }, []);
 
   // Supprimer un utilisateur
   const handleDeleteUser = async (userId) => {
