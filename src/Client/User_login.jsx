@@ -21,27 +21,29 @@ function UserLogin() {
 
     //soumission du formulaire
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    setMessage(null);
-
-    try {
-        // Appel de l'API pour se connecter
-        const response = await loginUser({
-            email: formData.email,
-            password: formData.password,
-            nom_user: formData.nom_user
-        });
-
-        localStorage.setItem("token", response.result);
-
-        console.log("Connexion réussie :", response);
-        setMessage("Connexion réussie !");
-        
-    } catch (error) {
-        console.error("Erreur de connexion :", error);
-        setMessage("Échec de la connexion : " + (error.response?.data?.message || error.message));
-    }
-};
+        e.preventDefault();
+        setMessage(null);
+    
+        try {
+            const response = await loginUser({
+                email: formData.email,
+                password: formData.password,
+                nom_user: formData.nom_user
+            });
+    
+            if (response.ok) {
+                localStorage.setItem("token", response.result.token);
+                console.log("Connexion réussie :", response);
+                setMessage("Connexion réussie !");
+            } else {
+                setMessage("Erreur : " + response.error);
+                console.error("Erreur de connexion :", response.error);
+            }
+        } catch (error) {
+            console.error("Erreur de connexion :", error);
+            setMessage("Échec de la connexion : " + error.message);
+        }
+    };
 
 
     

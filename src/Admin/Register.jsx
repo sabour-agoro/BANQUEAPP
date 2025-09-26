@@ -9,6 +9,7 @@ function Register() {
     adresse: "",
     date_naissance: "",
     password: "",
+    role: "user",
   });
 
   const [message, setMessage] = useState(null);
@@ -104,7 +105,21 @@ function Register() {
               />
             </div>
           ))}
-
+          <div className="mb-4">
+            <label className="block text-slate-400 font-medium mb-1" htmlFor="role">
+              Rôle :
+            </label>
+              <select
+                id="role"
+                name="role"
+                value={formData.role} // L'état actuel est affiché
+                onChange={handleChange} // Ta fonction gère la mise à jour
+                className="w-full p-2 rounded-md bg-slate-700 border border-slate-600 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+              >
+                <option value="user">Utilisateur Standard</option>
+                <option value="admin">Administrateur</option>
+              </select>
+          </div>
           <button
             type="submit"
             className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300 mt-6"

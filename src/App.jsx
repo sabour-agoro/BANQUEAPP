@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import Register from "./Admin/Register.jsx"; // Page création client
-import User from "./Admin/users.jsx";        // Page gestion utilisateurs
+import User from "./Admin/Comptes.jsx";        // Page gestion utilisateurs
 import UserLogin from "./Client/User_login.jsx"; // Page connexion client
 
 function App() {
