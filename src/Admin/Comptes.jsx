@@ -98,7 +98,7 @@ function Comptes() {
       <div className="mb-6 p-4 bg-gray-700 rounded-lg">
 
         <h2 className="text-xl font-semibold mb-3 text-green-400">
-          Rechercher un Utilisateur
+          Rechercher un compte
         </h2>
 
         <input

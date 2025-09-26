@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { registerUser } from "../Api.jsx";
+import { registerUser, loginUser } from "../Api.jsx";
+
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -9,13 +9,12 @@ function Register() {
     adresse: "",
     date_naissance: "",
     password: "",
-    role: "user",
+    role: "client", 
   });
 
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,34 +26,30 @@ function Register() {
     setIsLoading(true);
     setMessage(null);
 
-    const payload = { ...formData, id_banque: 1, role: "admin" };
+    const payload = { ...formData, id_banque: 1 };
 
     try {
-      const response = await registerUser(payload);
-
-      // Si le backend renvoie un token, on le stocke
-      if (response.token) {
-        localStorage.setItem("token", response.token);
-      }
+      await registerUser(payload);
 
       setMessage("Inscription réussie !");
 
-      setFormData({
-        nom_user: "",
-        email: "",
-        adresse: "",
-        date_naissance: "",
-        password: "",
+      const loginResponse = await loginUser({
+        nom_user: formData.nom_user,
+        email: formData.email,
+        password: formData.password,
       });
 
-      // Redirection vers Users.jsx après un court délai
-      setTimeout(() => {
-        navigate("/users");
-      }, 1000);
+      if (loginResponse.token) {
+        localStorage.setItem("token", loginResponse.token);
+      } else {
+        throw new Error("Connexion réussie mais aucun token n'a été reçu.");
+      }
 
+     
+     
     } catch (error) {
       setMessage(
-        "Erreur d'inscription : " +
+        "Erreur d'inscription ou de connexion : " +
           (error.response?.data?.detail || error.message)
       );
     } finally {
@@ -68,8 +63,8 @@ function Register() {
         {message && (
           <div
             className={`absolute top-4 p-4 rounded-md text-sm font-medium ${
-              message.includes("Erreur") ? "bg-red-500 text-white" : "bg-green-500 text-white"
-            }`}
+              message.includes("Erreur") ? "bg-red-500" : "bg-green-500"
+            } text-white`}
           >
             {message}
           </div>
@@ -83,7 +78,10 @@ function Register() {
           Page d'enregistrement client
         </h1>
 
-        <form className="bg-slate-900 p-8 rounded-lg shadow-md" onSubmit={handleSubmit}>
+        <form
+          className="bg-slate-900 p-8 rounded-lg shadow-md"
+          onSubmit={handleSubmit}
+        >
           {[
             { label: "Nom", name: "nom_user", type: "text" },
             { label: "Email", name: "email", type: "email" },
@@ -92,7 +90,10 @@ function Register() {
             { label: "Mot de passe", name: "password", type: "password" },
           ].map((field) => (
             <div className="mb-4" key={field.name}>
-              <label className="block text-slate-400 font-medium mb-1" htmlFor={field.name}>
+              <label
+                className="block text-slate-400 font-medium mb-1"
+                htmlFor={field.name}
+              >
                 {field.label} :
               </label>
               <input
@@ -105,21 +106,26 @@ function Register() {
               />
             </div>
           ))}
+
           <div className="mb-4">
-            <label className="block text-slate-400 font-medium mb-1" htmlFor="role">
+            <label
+              className="block text-slate-400 font-medium mb-1"
+              htmlFor="role"
+            >
               Rôle :
             </label>
-              <select
-                id="role"
-                name="role"
-                value={formData.role} // L'état actuel est affiché
-                onChange={handleChange} // Ta fonction gère la mise à jour
-                className="w-full p-2 rounded-md bg-slate-700 border border-slate-600 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-              >
-                <option value="user">Utilisateur Standard</option>
-                <option value="admin">Administrateur</option>
-              </select>
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full p-2 rounded-md bg-slate-700 border border-slate-600 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+            >
+              <option value="client">Utilisateur Standard</option>
+              <option value="admin">Administrateur</option>
+            </select>
           </div>
+
           <button
             type="submit"
             className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300 mt-6"

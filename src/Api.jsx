@@ -1,189 +1,210 @@
 import axios from "axios";
-const API_BASE_URL = "https://projet-sev-ali.onrender.com";
 
+const API_BASE_URL = "https://projet-sev-ali.onrender.com";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  headers: { "Content-Type": "application/json" },
 });
 
-//authenttifaication :
-
-export async function registerUser(payload) {
-  const res = await api.post("/auth/register", payload,{
-  headers: { "Content-Type" : "application/json" }
-    });
-  return res.data;
+// helper pour gérer les erreurs
+async function handleRequest(promise) {
+  try {
+    const res = await promise;
+    return res.data;
+  } catch (err) {
+    throw err.response?.data || { error: err.message };
+  }
 }
 
-export async function loginUser(payload) {
-  const res = await api.post("/auth/login", payload);
-  return res.data;
+// ========== AUTH ==========
+export function registerUser(payload) {
+  return handleRequest(
+    api.post("/auth/register", payload, {
+      headers: { "Content-Type": "application/json" },
+    })
+  );
 }
 
-
-// users  : 
-export async function getUsers(token) {
-  const res = await api.get("/users/", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+export function loginUser(payload) {
+  return handleRequest(api.post("/auth/login", payload));
 }
 
-export async function updateUser(email, payload, token) {
-  const res = await api.put(`/users/?email=${email}`, payload, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+// ========== USERS ==========
+export function getUsers(token) {
+  return handleRequest(
+    api.get("/users/", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  );
 }
 
-export async function getUserByEmail(search, token) {
-  const res = await api.get(`/users/email?search=${search}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+export function updateUser(email, payload, token) {
+  return handleRequest(
+    api.put(`/users/?email=${email}`, payload, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  );
 }
 
-export async function getUserById(userId, token) {
-  const res = await api.get(`/users/${userId}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+export function getUserByEmail(search, token) {
+  return handleRequest(
+    api.get(`/users/email?search=${search}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  );
 }
 
-export async function deleteUserById(userId, token) {
-  const res = await api.delete(`/users/${userId}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+export function getUserById(userId, token) {
+  return handleRequest(
+    api.get(`/users/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  );
 }
 
-// comptes : 
-export async function getAllComptes(account_type = null) {
-  const res = await api.get("/comptes/all", { params: { account_type } });
-  return res.data;
+export function deleteUserById(userId, token) {
+  return handleRequest(
+    api.delete(`/users/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  );
 }
 
-export async function createCompte(payload, token) {
-  const res = await api.post("/comptes/create", payload, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+// ========== COMPTES ==========
+export function getAllComptes(account_type = null) {
+  return handleRequest(api.get("/comptes/all", { params: { account_type } }));
 }
 
-export async function getUserComptes(account_type, token) {
-  const res = await api.get("/comptes/", {
-    headers: { Authorization: `Bearer ${token}` },
-    params: { account_type },
-  });
-  return res.data;
+export function createCompte(payload, token) {
+  return handleRequest(
+    api.post("/comptes/create", payload, {
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    })
+  );
 }
 
-export async function getCompteById(accountId, token) {
-  const res = await api.get(`/comptes/${accountId}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+export function getUserComptes(account_type, token) {
+  return handleRequest(
+    api.get("/comptes/", {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { account_type },
+    })
+  );
 }
 
-export async function deleteCompte(accountId, token) {
-  const res = await api.delete(`/comptes/${accountId}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+export function getCompteById(accountId, token) {
+  return handleRequest(
+    api.get(`/comptes/${accountId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  );
 }
 
-// les transactions :   
-export async function getAllTransactions(transac_type = null) {
-  const res = await api.get("/transactions/all", { params: { transac_type } });
-  return res.data;
+export function deleteCompte(accountId, token) {
+  return handleRequest(
+    api.delete(`/comptes/${accountId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  );
 }
 
-export async function getUserTransactions(account_id, transac_type, token) {
-  const res = await api.get("/transactions/", {
-    headers: { Authorization: `Bearer ${token}` },
-    params: { account_id, transac_type },
-  });
-  return res.data;
+// ========== TRANSACTIONS ==========
+export function getAllTransactions(transac_type = null) {
+  return handleRequest(api.get("/transactions/all", { params: { transac_type } }));
 }
 
-export async function doTransfert(payload, token) {
-  const res = await api.post("/transactions/transfert", payload, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+export function getUserTransactions(account_id, transac_type, token) {
+  return handleRequest(
+    api.get("/transactions/", {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { account_id, transac_type },
+    })
+  );
 }
 
-export async function doRetrait(payload, token) {
-  const res = await api.post("/transactions/retrait", payload, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+export function doTransfert(payload, token) {
+  return handleRequest(
+    api.post("/transactions/transfert", payload, {
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    })
+  );
 }
 
-export async function doDepot(payload, token) {
-  const res = await api.post("/transactions/depot", payload, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+export function doRetrait(payload, token) {
+  return handleRequest(
+    api.post("/transactions/retrait", payload, {
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    })
+  );
 }
 
-export async function getTransactionById(transac_id, account_id, token) {
-  const res = await api.get(`/transactions/${transac_id}`, {
-    headers: { Authorization: `Bearer ${token}` },
-    params: { account_id },
-  });
-  return res.data;
+export function doDepot(payload, token) {
+  return handleRequest(
+    api.post("/transactions/depot", payload, {
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    })
+  );
 }
 
-//les cartes : 
-export async function getAllCartes(carte_type = null) {
-  const res = await api.get("/cartes/all", { params: { carte_type } });
-  return res.data;
+export function getTransactionById(transac_id, account_id, token) {
+  return handleRequest(
+    api.get(`/transactions/${transac_id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { account_id },
+    })
+  );
 }
 
-export async function createCarte(payload, token) {
-  const res = await api.post("/cartes/create", payload, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+// ========== CARTES ==========
+export function getAllCartes(carte_type = null) {
+  return handleRequest(api.get("/cartes/all", { params: { carte_type } }));
 }
 
-export async function getUserCartes(carte_type, account_id, token) {
-  const res = await api.get("/cartes/", {
-    headers: { Authorization: `Bearer ${token}` },
-    params: { carte_type, account_id },
-  });
-  return res.data;
+export function createCarte(payload, token) {
+  return handleRequest(
+    api.post("/cartes/create", payload, {
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    })
+  );
 }
 
-export async function getCarteById(carte_id, password, token) {
-  const res = await api.get(`/cartes/${carte_id}`, {
-    headers: { Authorization: `Bearer ${token}` },
-    params: { password },
-  });
-  return res.data;
+export function getUserCartes(carte_type, account_id, token) {
+  return handleRequest(
+    api.get("/cartes/", {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { carte_type, account_id },
+    })
+  );
 }
 
-export async function deleteCarte(carte_id, password, token) {
-  const res = await api.delete(`/cartes/${carte_id}`, {
-    headers: { Authorization: `Bearer ${token}` },
-    params: { password },
-  });
-  return res.data;
+export function getCarteById(carte_id, password, token) {
+  return handleRequest(
+    api.get(`/cartes/${carte_id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { password },
+    })
+  );
 }
 
-export async function changeCartePassword(payload, token) {
-  const res = await api.put("/cartes/change-password", payload, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
+export function deleteCarte(carte_id, password, token) {
+  return handleRequest(
+    api.delete(`/cartes/${carte_id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { password },
+    })
+  );
 }
 
-// root 
-export async function getRoot() {
-  const res = await api.get("/");
-  return res.data;
+export function changeCartePassword(payload, token) {
+  return handleRequest(
+    api.put("/cartes/change-password", payload, {
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    })
+  );
+}
+
+// ========== ROOT ==========
+export function getRoot() {
+  return handleRequest(api.get("/"));
 }
