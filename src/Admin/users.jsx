@@ -5,7 +5,7 @@ import {
   getUserByEmail,
   getUserById,
   deleteUserById,
-} from "../Api.jsx"; // assure-toi que le path correspond à ton projet
+} from "../Api.jsx"; 
 
 function User({ token }) {
   const [users, setUsers] = useState([]);
@@ -23,33 +23,33 @@ function User({ token }) {
     id_banque: "",
   });
 
-  // token effectif : prop ou fallback localStorage
+ 
   const effectiveToken = token || localStorage.getItem("token");
 
   useEffect(() => {
-    // on essaye de charger même si token change ou existe en localStorage
+    
     fetchUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [effectiveToken]);
 
-  // Helper : normalize response -> retourne un tableau d'utilisateurs (ou tableau vide)
+  
   const normalizeToList = (response) => {
     if (!response) return [];
     if (Array.isArray(response)) return response;
-    // structure { ok: true, result: [...] } OR { ok: true, result: {...} }
+    
     if (response.result !== undefined) {
       if (Array.isArray(response.result)) return response.result;
       if (response.result && typeof response.result === "object") return [response.result];
     }
-    // maybe response itself is a single object
+    
     if (typeof response === "object") return [response];
     return [];
   };
 
   const extractErrorMessage = (err) => {
-    // handle handleRequest thrown object (err.response?.data or custom)
+    
     if (!err) return "Erreur inconnue";
-    // FastAPI validation: { detail: [ { msg, loc, ... } ] }
+    
     if (err.detail) {
       if (Array.isArray(err.detail)) {
         return err.detail.map((d) => d.msg || JSON.stringify(d)).join(" ; ");
@@ -58,7 +58,7 @@ function User({ token }) {
     }
     if (err.error) return String(err.error);
     if (err.message) return String(err.message);
-    // fallback
+   
     try {
       return JSON.stringify(err);
     } catch {
@@ -80,18 +80,19 @@ function User({ token }) {
       console.debug("getUsers response:", response);
       const list = normalizeToList(response);
       if (list.length === 0) {
-        // maybe response had { ok:false, error: "..." }
+
         if (response && response.ok === false) {
           setMessage(response.error || "Aucun utilisateur disponible");
           setUsers([]);
         } else {
           setUsers([]);
-          setMessage(""); // pas d'erreur, mais liste vide
+          setMessage(""); 
         }
       } else {
         setUsers(list);
         setMessage("");
       }
+
     } catch (err) {
       console.error("fetchUsers error:", err);
       setMessage("Erreur de récupération des utilisateurs : " + extractErrorMessage(err));
@@ -151,8 +152,7 @@ function User({ token }) {
       } else {
         setMessage("Utilisateur mis à jour avec succès");
         fetchUsers();
-        // clear edit form optionally:
-        // setEditEmail(""); setEditData({...});
+        
       }
     } catch (err) {
       console.error("handleUpdate error:", err);
@@ -217,7 +217,7 @@ function User({ token }) {
         </div>
       )}
 
-      {/* Recherche */}
+    
       <div className="flex gap-2 mb-6 max-w-lg">
         <input
           type="text"

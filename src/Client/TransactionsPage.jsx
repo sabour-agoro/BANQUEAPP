@@ -12,15 +12,14 @@ const getMessageClass = (msg) => {
 };
 
 
-function Dashboard() {
-    // États des données
-    const [user, setUser] = useState(null);
+function TransactionPage() {
+   
     const [comptes, setComptes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [message, setMessage] = useState(null);
 
-    // Pour gérer l'affichage de la vue
-    const [viewMode, setViewMode] = useState('accounts'); // 'accounts', 'transfert', 'transactions'
+    
+    const [viewMode, setViewMode] = useState('accounts'); 
 
     useEffect(() => {
         const fetchData = async () => {
@@ -146,4 +145,4 @@ function Dashboard() {
     );
 }
 
-export default Dashboard;
+export default TransactionPage;

@@ -109,7 +109,6 @@ function SimpleTransactionForm({ transactionType, defaultAccountId }) {
                         onChange={handleChange} 
                     />
                     
-                    {/* Champ pour le montant */}
                     <div>
                         <label className="block text-sm font-medium text-gray-300 mb-1">Montant de l'opération (€)</label>
                         <input 

@@ -20,35 +20,27 @@ function UserLogin() {
     setMessage(null);
 
     try {
-      const response = await loginUser({
-        nom_user: formData.nom_user,
-        email: formData.email,
-        password: formData.password,
-        // Enlève nom_user, car la plupart des API de connexion n'ont besoin que de l'e-mail et du mot de passe.
-      });
+       const response = await loginUser(formData);
+       console.log("Réponse brute du login :", response);
 
-      // ✅ Accédez au token en utilisant le bon chemin : response.result.access_token
-      if (response.result && response.result.access_token) {
+      if (response && response.result && response.result.access_token) {
         localStorage.setItem("token", response.result.access_token);
         console.log("Connexion réussie :", response);
         setMessage("Connexion réussie !");
-        
-        // Ajoutez ici la logique de redirection, par exemple :
-        // setTimeout(() => {
-        //   navigate("/dashboard");
-        // }, 1000);
+      
 
       } else {
-        // Le code entre ici si la connexion a réussi mais que le format de la réponse est incorrect
+      
         setMessage("Erreur de connexion : le format de la réponse est invalide.");
         console.error("Erreur de connexion :", response);
       }
     } catch (error) {
-      // ⚠️ Ce bloc est pour les erreurs de la requête elle-même (ex: 401 Unauthorized, 500 Internal Server Error)
+     
       console.error("Erreur de connexion :", error);
       setMessage("Échec de la connexion : " + (error.response?.data?.detail || "Vérifiez vos identifiants."));
     }
   };
+  
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-slate-800 text-white">

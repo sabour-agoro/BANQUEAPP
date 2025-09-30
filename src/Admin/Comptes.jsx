@@ -17,7 +17,8 @@ function Comptes() {
     navigate("/login");
   }
 
-  // Liste des comptes
+  
+ 
   const fetchComptes = async () => {
     setIsLoading(true);
     setMessage("");
@@ -120,7 +121,7 @@ function Comptes() {
         {searchedUser && (
           <div className="mt-4 p-3 bg-gray-600 rounded-md">
             <h3 className="text-lg font-semibold text-green-300">
-              Utilisateur Trouvé :
+             Compte Trouvé :
             </h3>
             <p className="mt-2">
               <span className="font-medium text-gray-200">Nom :</span> {searchedUser.nom_user}

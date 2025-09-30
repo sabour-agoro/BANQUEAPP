@@ -42,7 +42,7 @@ export default function TransferForm({ defaultAccountId }) {
       const response = await doTransfert(formData, token);
 
       // cas où doTransfert renvoie un objet personnalisé
-      if (response && typeof response === "object" && !response instanceof Response) {
+      if (response && typeof response === "object" && !(response instanceof Response)) {
         if (response.ok) {
           setMessage("Transfert réussi !");
           setFormData({ account_id: defaultAccountId || "", amount: "", destinator_num_compte: "" });

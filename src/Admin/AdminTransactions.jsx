@@ -28,7 +28,7 @@ function AdminTransactions() {
         fetchTransactions();
     }, []);
     
-// Fonction utilitaire simple pour le CSS des messages
+
 const getMessageClass = (msg) => {
     if (msg && msg.includes("Erreur")) {
         return "bg-red-800 text-white";

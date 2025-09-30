@@ -7,7 +7,7 @@ const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// helper pour gérer les erreurs
+
 async function handleRequest(promise) {
   try {
     const res = await promise;
@@ -17,7 +17,7 @@ async function handleRequest(promise) {
   }
 }
 
-// ========== AUTH ==========
+// authetification
 export function registerUser(payload) {
   return handleRequest(
     api.post("/auth/register", payload, {
@@ -30,7 +30,7 @@ export function loginUser(payload) {
   return handleRequest(api.post("/auth/login", payload));
 }
 
-// ========== USERS ==========
+// users
 export function getUsers(token) {
   return handleRequest(
     api.get("/users/", {
@@ -71,10 +71,10 @@ export function deleteUserById(userId, token) {
   );
 }
 
-// ========== COMPTES ==========
+// comptes
 export function getAllComptes(account_type = null) {
   return handleRequest(api.get("/comptes/all", { params: { account_type } }));
-}
+} 
 
 export function createCompte(payload, token) {
   return handleRequest(
@@ -109,7 +109,7 @@ export function deleteCompte(accountId, token) {
   );
 }
 
-// ========== TRANSACTIONS ==========
+//transactions
 export function getAllTransactions(transac_type = null) {
   return handleRequest(api.get("/transactions/all", { params: { transac_type } }));
 }
@@ -156,7 +156,7 @@ export function getTransactionById(transac_id, account_id, token) {
   );
 }
 
-// ========== CARTES ==========
+// cartes 
 export function getAllCartes(carte_type = null) {
   return handleRequest(api.get("/cartes/all", { params: { carte_type } }));
 }
@@ -204,7 +204,7 @@ export function changeCartePassword(payload, token) {
   );
 }
 
-// ========== ROOT ==========
+// root 
 export function getRoot() {
   return handleRequest(api.get("/"));
 }
